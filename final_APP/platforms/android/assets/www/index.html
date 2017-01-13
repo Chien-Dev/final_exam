@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <script src="ratchet/dist/js/ratchet.js"></script>
+    <link rel="stylesheet" type="text/css" href="ratchet/dist/css/ratchet.css" />
+    
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+    
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWaszYHEkXRnVoiXh9zy55i-ORz-mBpfs" async defer></script>
+
+    <title>公車動態</title>
+</head>
+
+<body onload=getLocation()>
+    <br><br>
+   <header class="bar bar-nav">
+      <h1 class="title">台中公車動態</h1>
+    </header>
+    <div class="content"  style="background-color:rgb(204, 255, 204);">
+		  <img src="http://cdn.marketplaceimages.windowsphone.com/v8/images/9576a385-5fd1-4885-8ba7-0bc5380f0e78?imageType=ws_icon_large" style="display:block; margin:auto;" border="0"><br>
+        
+		</div>
+    
+    <div id="introduce" class="modal" >
+		  <header class="bar bar-nav">
+		    <a class="icon icon-left-nav pull-left" href="#introduce"></a>
+		    <h1 class="title">路線查詢</h1>
+		  </header>
+		  <div class="content">
+		  	<form>
+                <input data-type="search" id="filterControlgroup-input">
+              </form>
+              <div data-role="controlgroup" data-filter="true" data-input="#filterControlgroup-input">
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">1</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">2</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">3</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">4</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">5</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">6</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">7</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">8</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">9</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">10</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">11</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">12</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">13</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">14</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">15</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">16</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">17</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">18</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">19</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">20</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">21</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">22</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">23</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">24</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">25</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">26</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">27</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">28</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">29</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">30</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">39</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">40</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">45</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">48</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">50</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">62</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">68</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">75</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">77</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">85</a>
+                  <a href="#" class="ui-btn ui-shadow ui-corner-all">93</a>
+                  <a class="ui-btn ui-shadow ui-corner-all" onclick="window.location.href = 'yo.html';">100</a>
+              </div>
+		  	
+		  </div>
+        
+		</div>
+    		<div id="class" class="modal">
+		  <header class="bar bar-nav">
+		    <a class="icon icon-left-nav pull-left" href="#class"></a>
+		    <h1 class="title">我的最愛</h1>
+		  </header>
+
+		  <div class="content">
+<form class="input-group">
+        <div class="input-row">
+          <label>姓名</label>
+          <input id="name" type="text" placeholder="GP">
+        </div>
+        <div class="input-row">
+          <label>暱稱</label>
+          <input id="nick" type="text" placeholder="Great Penguin">
+        </div>
+        <div class="input-row">
+          <label>電話</label>
+          <input id="phone" type="number" placeholder="0912122112">
+        </div>
+      </form>
+      <button class="btn btn-positive btn-block" id="addPerson">新增</button>
+      <div id="person_list"></div>
+      <div class="bar bar-standard bar-footer">
+      <h3>資訊工程學系(數位內容組)</h3>
+      </div>
+
+
+
+		  </div>
+		</div>
+    <div id="info" class="modal">
+		  <header class="bar bar-nav">
+		    <a class="icon icon-left-nav pull-left" href="#info"></a>
+		    <h1 class="title">附近站牌</h1>
+		  </header>
+
+
+		  <div id=content class="content">
+<div id="map" style="width:100%; height:40%;"></div>
+
+		<div class="content-padded">
+<!-- 			<li class="table-view-cell">
+				Item 1
+				<div class="toggle">
+				<div class="toggle-handle"></div>
+				</div>
+			</li> -->
+			<button id="trackBtn" class="btn btn-positive btn-block" onclick="getLocation()">Start tracking</button>
+		</div>
+		<form class="input-group" style="font-size:0.75em">
+		  <div class="input-row">
+    		<label>經度</label>
+				<input id="latitude" type="text" placeholder="經度 degree">
+			</div>
+			<div class="input-row">
+    		<label>緯度</label>
+			<input id="longitude" type="text" placeholder="緯度 degree">
+			</div>
+			<div class="input-row">
+    		<label>高度</label>
+    		<input id="altitude" type="text" placeholder="高度 m">
+    	</div>
+			<div class="input-row">
+    		<label>精確度</label>
+				<input id="accuracy" type="text" placeholder="精確度 m">
+			</div>
+			<div class="input-row">
+    		<label>高度精確度</label>
+				<input id="altitudeAccuracy" type="text" placeholder="高度精確度 m">
+			</div>
+			<div class="input-row">
+    		<label>移動方向</label>
+				<input id="heading" type="text" placeholder="移動方向 degree/s">
+			</div>
+			<div class="input-row">
+    		<label>移動速度</label>
+				<input id="speed" type="text" placeholder="移動速度 m/s">
+			</div>
+			<div class="input-row">
+    		<label>時間戳記</label>
+				<input id="timestamp" type="text" placeholder="時間戳記 ms">
+			</div>
+		</form>
+		<button id="trackBtn" class="btn btn-primary btn-block" onclick="cleanUp()">Reload Map</button>
+
+
+<script>
+function $getElement(id) {return document.getElementById(id);}
+// var latitude = document.getElementById("latitude");
+// var longitude = document.getElementById("longitude");
+// var altitude = document.getElementById("altitude");
+// var accuracy = document.getElementById("accuracy");
+// var altitudeAccuracy = document.getElementById("altitudeAccuracy");
+// var heading = document.getElementById("heading");
+// var speed = document.getElementById("speed");
+// var timestamp = document.getElementById("timestamp");
+
+var lat, long;
+var timmer,count=0;
+var markers = [];
+var map, poly;
+/*-------------Timmer-------------*/
+function timedCount(){
+	timmer=setTimeout("timedCount()",5000);
+	console.log("getLocation_count: "+(++count));
+	getLocation();
+}
+function stopCount(){
+	clearTimeout(timmer);
+}
+/*-------------initMap-------------*/
+function initMap(position) {
+	// Create a map object and specify the DOM element for display.
+	var latlon = new google.maps.LatLng(lat, long);
+	var option = {
+		center: latlon,
+		scrollwheel: false,
+		zoom: 16
+	}
+	map = new google.maps.Map(document.getElementById('map'), option);
+	// addMarker(latlon);
+
+	poly = new google.maps.Polyline({
+    strokeColor: '#000000',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  });
+
+  poly.setMap(map);
+  addLatLng();
+}
+/*-------------Polyline-------------*/
+// Handles click events on a map, and adds a new point to the Polyline.
+function addLatLng() {
+  var path = poly.getPath();
+  var latLng = new google.maps.LatLng(lat, long);
+  // Because path is an MVCArray, we can simply append a new coordinate
+  // and it will automatically appear.
+  path.push(latLng);
+  console.log(path);
+  // Add a new marker at the new plotted point on the polyline.
+  var marker = new google.maps.Marker({
+    position: latLng,
+    title: '#' + path.getLength(),
+    map: map
+  });
+}
+function removeLine() {
+  poly.setMap(null);
+}
+/*-------------button_event-------------*/
+$getElement("trackBtn").addEventListener("click", function(){
+	var btn = document.getElementById("trackBtn");
+	console.log("btnStatus: "+btn.innerHTML);
+
+  if (btn.innerHTML == "Start tracking"){
+		btn.innerHTML = "Stop tracking";
+		btn.className = "btn btn-negative btn-block";
+		timedCount();
+	}else{
+		btn.innerHTML = "Start tracking";
+		btn.className = "btn btn-positive btn-block";
+		stopCount();
+	}
+});
+function cleanUp(){
+	removeLine();
+	initMap();
+}
+/*-------------get_GPS_data-------------*/
+function getLocation() {
+    if (window.navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+    		console.log("Geolocation is not supported by this browser.");
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+		lat = position.coords.latitude;
+		long = position.coords.longitude;
+		console.log("getLatlon: "+lat+","+long);
+
+  	successCallback(position);
+    initMap(position);
+}
+
+function showError(error) {
+	switch(error.code) {
+		case error.PERMISSION_DENIED:
+			console.log("你拒絕提供定位權限!");
+	    alert("你拒絕提供定位權限!");
+	    break;
+		case error.POSITION_UNAVAILABLE:
+			console.log("查無位置訊息!");
+	    alert("查無位置訊息!");
+	    break;
+		case error.TIMEOUT:
+			console.log("取得定位逾時!");
+	    alert("取得定位逾時!");
+	    break;
+		case error.UNKNOWN_ERROR:
+			console.log("未知的錯誤!");
+	    alert("未知的錯誤!");
+	    break;
+	}
+}
+function successCallback(position) {
+	$getElement("latitude").value         = position.coords.latitude;
+	$getElement("longitude").value        = position.coords.longitude;
+	$getElement("altitude").value         = position.coords.altitude+' m';
+	$getElement("accuracy").value         = position.coords.accuracy+' m';
+	$getElement("altitudeAccuracy").value = position.coords.altitudeAccuracy+' m';
+	$getElement("heading").value          = position.coords.heading+' deg/s';
+	$getElement("speed").value            = position.coords.speed+' m/s';
+	$getElement("timestamp").value        = position.timestamp+' ms';
+}
+// // Adds a marker to the map and push to the array.
+// function addMarker(location) {
+//   var marker = new google.maps.Marker({
+//     position: location,
+//     map: map
+//   });
+//   markers.push(marker);
+// }
+// // Sets the map on all markers in the array.
+// function setMapOnAll(map) {
+//   for (var i = 0; i < markers.length; i++) {
+//     markers[i].setMap(map);
+//   }
+// }
+// // Removes the markers from the map, but keeps them in the array.
+// function clearMarkers() {
+//   setMapOnAll(null);
+// }
+// // Shows any markers currently in the array.
+// function showMarkers() {
+//   setMapOnAll(map);
+// }
+// // Deletes all markers in the array by removing references to them.
+// function deleteMarkers() {
+//   clearMarkers();
+//   markers = [];
+// }
+</script>
+
+</div>
+
+              <p id="deviceProperties">Loading device properties...</p>
+		  </div>
+        
+    
+<!--
+    <div class="app">
+        <h1>PhoneGap</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">Connecting to Device</p>
+            <p class="event received">Device is Ready</p>
+        </div>
+    </div>
+-->
+     <header class="bar bar-nav">
+  <h1 class="title">Title</h1>
+<header class="bar bar-nav">
+  <h1 class="title"  style="background-color:#c68c53; border-style:outset;">公車動態</h1>
+</header>
+<nav class="bar bar-tab">
+  <a class="tab-item" href="#introduce">
+    路線查詢
+  </a>
+  <a class="tab-item" onclick="window.location.href = 'love.html';">
+    我的最愛
+  </a>
+  <a class="tab-item" onclick="window.location.href = 'location.html';">
+    目前位置
+  </a>
+</nav>
+         
+<!--    <script type="text/javascript" src="cordova.js"></script>-->
+<!--
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="ratchet/js/puch.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+-->
+</body>
+
+</html>

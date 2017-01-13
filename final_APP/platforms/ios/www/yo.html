@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+  <head>
+       <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- This stylesheet contains specific styles for displaying the map
+         on this page. Replace it with your own styles as described in the
+         documentation:
+         https://developers.google.com/maps/documentation/javascript/tutorial -->
+    <link rel="stylesheet" href="https://developers.google.com/maps/documentation/javascript/demos/demos.css">
+<script src="ratchet/dist/js/ratchet.js"></script>
+    <link rel="stylesheet" type="text/css" href="ratchet/dist/css/ratchet.css" />
+  </head>
+  <body style="height: 100%;" onload="drop()">
+      <header class="bar bar-nav">
+  <a class="icon icon-left-nav pull-left" onClick="history.back()"></a>
+  <h1 class="title">100號公車</h1>
+</header>
+      
+      
+     <div id="floating-panel">
+         <br><br><br>
+      <button id="drop" class="btn btn-primary btn-block" onclick="local()">我的位置</button>
+     </div>
+    <div id="map" style="height: 100%;">
+      
+      </div>
+    <script>
+      var neighborhoods = [
+  {lat:24.25111222,lng:120.735358},
+{lat:24.25142524,lng:120.7335073},
+{lat:24.249868,lng:120.731323},
+{lat:24.248025,lng:120.729822},
+{lat:24.245455,lng:120.728586},
+{lat:24.24512545,lng:120.7275689},
+{lat:24.245998,lng:120.725616},
+{lat:24.244823,lng:120.723801},
+{lat:24.24360915,lng:120.7216895},
+{lat:24.243345,lng:120.719261},
+{lat:24.24385372,lng:120.7175159},
+{lat:24.243548,lng:120.71377},
+{lat:24.241535,lng:120.7127},
+{lat:24.238367,lng:120.710855},
+{lat:24.23688,lng:120.710303},
+{lat:24.235103,lng:120.709642},
+{lat:24.231507,lng:120.708697},
+{lat:24.228252,lng:120.708142},
+{lat:24.226553,lng:120.7077},
+{lat:24.22424,lng:120.707305},
+{lat:24.221308,lng:120.706417},
+{lat:24.217528,lng:120.705686},
+{lat:24.215052,lng:120.705112},
+{lat:24.2127363,lng:120.7053173},
+{lat:24.209493,lng:120.70522},
+{lat:24.20788774,lng:120.70521},
+{lat:24.20488848,lng:120.7046467},
+{lat:24.203227,lng:120.704067},
+{lat:24.199937,lng:120.703217},
+{lat:24.195497,lng:120.702472},
+{lat:24.191502,lng:120.702455},
+{lat:24.18705785,lng:120.7024688},
+{lat:24.18137638,lng:120.7016158},
+{lat:24.178625,lng:120.700387},
+{lat:24.175747,lng:120.699198},
+{lat:24.173632,lng:120.69832},
+{lat:24.169992,lng:120.697435},
+{lat:24.16761943,lng:120.6958759},
+{lat:24.165468,lng:120.694478},
+{lat:24.16312167,lng:120.6930833},
+{lat:24.161357,lng:120.692282},
+{lat:24.158255,lng:120.690275},
+{lat:24.156847,lng:120.68858},
+{lat:24.15527833,lng:120.68695},
+{lat:24.154103,lng:120.685778},
+{lat:24.152093,lng:120.68506},
+{lat:24.14961226,lng:120.6839347},
+{lat:24.145842,lng:120.682433},
+{lat:24.144415,lng:120.681547},
+{lat:24.143155,lng:120.680243},
+{lat:24.141402,lng:120.679092},
+{lat:24.139768,lng:120.681103},
+{lat:24.13971924,lng:120.6818265},
+{lat:24.13796181,lng:120.6845999},
+{lat:24.132565,lng:120.683917},
+{lat:24.130257,lng:120.685017},
+{lat:24.12723,lng:120.684425},
+{lat:24.12568,lng:120.684058},
+{lat:24.122805,lng:120.6840733},
+{lat:24.121198,lng:120.68664},
+{lat:24.11794,lng:120.689572},
+{lat:24.115084,lng:120.689579},
+{lat:24.114082,lng:120.689736},
+{lat:24.112496,lng:120.689857},
+{lat:24.11107,lng:120.689931},
+{lat:24.10862538,lng:120.6900287},
+{lat:24.105839,lng:120.689406},
+{lat:24.102568,lng:120.688637},
+{lat:24.10002,lng:120.6879},
+{lat:24.097347,lng:120.686942},
+{lat:24.09192,lng:120.69146},
+{lat:24.08994,lng:120.693712},
+{lat:24.08754424,lng:120.6959724},
+{lat:24.084035,lng:120.697247},
+{lat:24.080558,lng:120.698353},
+{lat:24.076542,lng:120.699517},
+{lat:24.073315,lng:120.699863},
+{lat:24.0697,lng:120.69928},
+{lat:24.068292,lng:120.699298},
+{lat:24.06398,lng:120.698788},
+{lat:24.062517,lng:120.69847},
+{lat:24.059738,lng:120.698067},
+{lat:24.05764,lng:120.69793},
+{lat:24.055475,lng:120.697213},
+{lat:24.049502,lng:120.694028},
+{lat:24.04592,lng:120.692357},
+{lat:24.043059,lng:120.68992},
+{lat:24.043765,lng:120.688596},
+{lat:24.046621,lng:120.687562},
+{lat:24.049335,lng:120.686478}
+
+];
+
+var markers = [];
+var map;
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 13,
+    center: {lat:24.170237,lng:120.697896}
+  });
+}
+        
+function local(){
+    var infoWindow = new google.maps.InfoWindow({map: map});
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('目前位置');
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+        
+
+function drop() {
+  clearMarkers();
+  for (var i = 0; i < neighborhoods.length; i++) {
+    addMarkerWithTimeout(neighborhoods[i], i * 100);
+  }
+
+}
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: 找不到位置' :
+                        'Error: 裝置不支援');
+}
+        
+function addMarkerWithTimeout(position, timeout) {
+  window.setTimeout(function() {
+    markers.push(new google.maps.Marker({
+      position: position,
+      map: map,
+      animation: google.maps.Animation.DROP
+    }));
+  }, timeout);
+}
+
+function clearMarkers() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+  markers = [];
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbMCJ0TYrG2IPG8CgjakJTqYvVeLfxLjk&callback=initMap"
+        async defer></script>
+  </body>
+</html>

@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- Sets initial viewport load and disables zooming  -->
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<title>Ex 1</title>
+
+	<!-- Include the compiled Ratchet CSS -->
+    <script src="ratchet/dist/js/ratchet.js"></script>
+    <link rel="stylesheet" type="text/css" href="ratchet/dist/css/ratchet.css" />
+  <!-- Include the Google Maps API --> 
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDWaszYHEkXRnVoiXh9zy55i-ORz-mBpfs" async defer></script>
+
+
+</head>
+<body onload=getLocation()>
+	<header class="bar bar-nav">
+        <a class="icon icon-left-nav pull-left" onClick="history.back()"></a>
+	  <h1 class="title">目前位置</h1>
+	</header>
+
+	<div id=content class="content">
+
+		<div id="map" style="width:100%; height:40%;"></div>
+
+		<div class="content-padded">
+<!-- 			<li class="table-view-cell">
+				Item 1
+				<div class="toggle">
+				<div class="toggle-handle"></div>
+				</div>
+			</li> -->
+			<button id="trackBtn" class="btn btn-positive btn-block" onclick="getLocation()">定位我的位置</button>
+		</div>
+		<form class="input-group" style="font-size:0.75em">
+		  <div class="input-row">
+    		<label>經度</label>
+				<input id="latitude" type="text" placeholder="經度 degree">
+			</div>
+			<div class="input-row">
+    		<label>緯度</label>
+			<input id="longitude" type="text" placeholder="緯度 degree">
+			</div>
+			<div class="input-row">
+    		<label>高度</label>
+    		<input id="altitude" type="text" placeholder="高度 m">
+    	</div>
+			<div class="input-row">
+    		<label>精確度</label>
+				<input id="accuracy" type="text" placeholder="精確度 m">
+			</div>
+			<div class="input-row">
+    		<label>高度精確度</label>
+				<input id="altitudeAccuracy" type="text" placeholder="高度精確度 m">
+			</div>
+			<div class="input-row">
+    		<label>移動方向</label>
+				<input id="heading" type="text" placeholder="移動方向 degree/s">
+			</div>
+			<div class="input-row">
+    		<label>移動速度</label>
+				<input id="speed" type="text" placeholder="移動速度 m/s">
+			</div>
+			<div class="input-row">
+    		<label>時間戳記</label>
+				<input id="timestamp" type="text" placeholder="時間戳記 ms">
+			</div>
+		</form>
+		<button id="trackBtn" class="btn btn-primary btn-block" onclick="cleanUp()">Reload Map</button>
+</div>
+
+<script>
+function $getElement(id) {return document.getElementById(id);}
+// var latitude = document.getElementById("latitude");
+// var longitude = document.getElementById("longitude");
+// var altitude = document.getElementById("altitude");
+// var accuracy = document.getElementById("accuracy");
+// var altitudeAccuracy = document.getElementById("altitudeAccuracy");
+// var heading = document.getElementById("heading");
+// var speed = document.getElementById("speed");
+// var timestamp = document.getElementById("timestamp");
+
+var lat, long;
+var timmer,count=0;
+var markers = [];
+var map, poly;
+/*-------------Timmer-------------*/
+function timedCount(){
+	timmer=setTimeout("timedCount()",5000);
+	console.log("getLocation_count: "+(++count));
+	getLocation();
+}
+function stopCount(){
+	clearTimeout(timmer);
+}
+/*-------------initMap-------------*/
+function initMap(position) {
+	// Create a map object and specify the DOM element for display.
+	var latlon = new google.maps.LatLng(lat, long);
+	var option = {
+		center: latlon,
+		scrollwheel: false,
+		zoom: 16
+	}
+	map = new google.maps.Map(document.getElementById('map'), option);
+	// addMarker(latlon);
+
+	poly = new google.maps.Polyline({
+    strokeColor: '#000000',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  });
+
+  poly.setMap(map);
+  addLatLng();
+}
+/*-------------Polyline-------------*/
+// Handles click events on a map, and adds a new point to the Polyline.
+function addLatLng() {
+  var path = poly.getPath();
+  var latLng = new google.maps.LatLng(lat, long);
+  // Because path is an MVCArray, we can simply append a new coordinate
+  // and it will automatically appear.
+  path.push(latLng);
+  console.log(path);
+  // Add a new marker at the new plotted point on the polyline.
+  var marker = new google.maps.Marker({
+    position: latLng,
+    title: '#' + path.getLength(),
+    map: map
+  });
+}
+function removeLine() {
+  poly.setMap(null);
+}
+/*-------------button_event-------------*/
+$getElement("trackBtn").addEventListener("click", function(){
+	var btn = document.getElementById("trackBtn");
+	console.log("btnStatus: "+btn.innerHTML);
+
+  if (btn.innerHTML == "定位我的位置"){
+		btn.innerHTML = "停止定位";
+		btn.className = "btn btn-negative btn-block";
+		timedCount();
+	}else{
+		btn.innerHTML = "定位我的位置";
+		btn.className = "btn btn-positive btn-block";
+		stopCount();
+	}
+});
+function cleanUp(){
+	removeLine();
+	initMap();
+}
+/*-------------get_GPS_data-------------*/
+function getLocation() {
+    if (window.navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+    		console.log("Geolocation is not supported by this browser.");
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+		lat = position.coords.latitude;
+		long = position.coords.longitude;
+		console.log("getLatlon: "+lat+","+long);
+
+  	successCallback(position);
+    initMap(position);
+}
+
+function showError(error) {
+	switch(error.code) {
+		case error.PERMISSION_DENIED:
+			console.log("你拒絕提供定位權限!");
+	    alert("你拒絕提供定位權限!");
+	    break;
+		case error.POSITION_UNAVAILABLE:
+			console.log("查無位置訊息!");
+	    alert("查無位置訊息!");
+	    break;
+		case error.TIMEOUT:
+			console.log("取得定位逾時!");
+	    alert("取得定位逾時!");
+	    break;
+		case error.UNKNOWN_ERROR:
+			console.log("未知的錯誤!");
+	    alert("未知的錯誤!");
+	    break;
+	}
+}
+function successCallback(position) {
+	$getElement("latitude").value         = position.coords.latitude;
+	$getElement("longitude").value        = position.coords.longitude;
+	$getElement("altitude").value         = position.coords.altitude+' m';
+	$getElement("accuracy").value         = position.coords.accuracy+' m';
+	$getElement("altitudeAccuracy").value = position.coords.altitudeAccuracy+' m';
+	$getElement("heading").value          = position.coords.heading+' deg/s';
+	$getElement("speed").value            = position.coords.speed+' m/s';
+	$getElement("timestamp").value        = position.timestamp+' ms';
+}
+// // Adds a marker to the map and push to the array.
+// function addMarker(location) {
+//   var marker = new google.maps.Marker({
+//     position: location,
+//     map: map
+//   });
+//   markers.push(marker);
+// }
+// // Sets the map on all markers in the array.
+// function setMapOnAll(map) {
+//   for (var i = 0; i < markers.length; i++) {
+//     markers[i].setMap(map);
+//   }
+// }
+// // Removes the markers from the map, but keeps them in the array.
+// function clearMarkers() {
+//   setMapOnAll(null);
+// }
+// // Shows any markers currently in the array.
+// function showMarkers() {
+//   setMapOnAll(map);
+// }
+// // Deletes all markers in the array by removing references to them.
+// function deleteMarkers() {
+//   clearMarkers();
+//   markers = [];
+// }
+</script>
+</body>
+</html>
